@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
 
   const token = Jwt.sign(
     { role: "USER", id: user._id },
-    process.env.USER_SECRET_KEY,
+    process.env.SECRET_KEY,
     {
       expiresIn: "7d",
     }
@@ -43,4 +43,13 @@ router.post("/login", async (req, res) => {
 
   return res.status(201).json({ message: "Login successful", token: token });
 });
+
+//user get by id
+router.get("/profile/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  user.password = "";
+  res.status(200).json(user);
+});
+
 export default router;
